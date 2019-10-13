@@ -1,0 +1,120 @@
+<html>
+  <head>
+    <title>Whatcha wanna do</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
+
+    <!-- <script type = "text/javascript" src = "{{ url_for('static', filename = 'layOutDay.js') }}" ></script> -->
+  </head>
+  <body>
+      <h1 id = "head"> Whatcha Wanna Do?</h1>
+      <!-- <div id = "col"> -->
+          <div id = "filter">
+                <form method="POST">
+                    <div class = "row">
+                      <div class = "cat">Date: <input type="date" name="date"><br> </div>
+                      <div class = "cat">Location: <input type="text" name="location"><br> </div>
+                    </div>
+                    <div class = "row">
+                        <div class= "cat"> Price:
+                        <select id = "ddm" name="price">
+                            <option value="free">Free</option>
+                            <option value="paid">Paid</option>
+                        </select>
+                        </div>
+                      <div class = "cat">Radius: <input type="text" name="radius"><br></div>
+
+                    </div>
+                    <div class = "row">
+                        <div class = "cat">Categories:
+                        <select id = "ddm" name="category">
+                            <option value="101">Business & Professional</option>
+                            <option value="102">Science & Technology</option>
+                            <option value="103">Music</option>
+                            <option value="104">Film, Media & Entertainment</option>
+                            <option value="105">Performing & Visual Arts</option>
+                            <option value="106">Fashion & Beauty</option>
+                            <option value="107">Health & Wellness</option>
+                            <option value="108">Sports & Fitness</option>
+                            <option value="109">Travel & Outdoor</option>
+                            <option value="110">Food & Drinks</option>
+                            <option value="111">Charity & Causes</option>
+                            <option value="112">Government & Politics</option>
+                            <option value="113">Community & Culture</option>
+                            <option value="114">Religion & Spirituality</option>
+                            <option value="115">Family & Education</option>
+                            <option value="116">Seasonal & Holiday</option>
+                            <option value="117">Home & Lifestyle</option>
+                            <option value="118">Auto, Boat & Air</option>
+                            <option value="119">Hobbies & Special Interest</option>
+                            <option value="120">School Activities</option>
+                            <option value="199">Other</option>
+                            <option value="101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,199">Surprise Me ;)</option>
+                        </select><br>
+                        </div>
+
+                    </div>
+                    <div id = "centersub" >
+                        <input id= "sub" type="submit" value="Submit"><br>
+                    </div>
+                </form>
+            </div>
+            <br>
+        <div id = "act">
+            <table id = "checklist">
+                <tr>
+                    <th> Activities: </th>
+                </tr>
+            </table>
+        </div>
+    <div id = "sched">
+        {% if lst %}
+            <p> Schedule: {{lst[0]["date"]}} </p>
+        {% endif %}
+        <div class ="container">
+          <div class="timings">
+              <!-- <hr> -->
+            <div> <span> 7:00 </span> AM </div>
+              <!-- <hr> -->
+            <div> 7:30 </div>
+            <div> <span> 8:00 </span> AM </div>
+            <div> 8:30 </div>
+            <div> <span> 9:00 </span> AM </div>
+            <div> 9:30 </div>
+            <div> <span> 10:00 </span>AM </div>
+            <div> 10:30 </div>
+            <div> <span> 11:00 </span>AM </div>
+            <div> 11:30 </div>
+            <div> <span> 12:00 </span>PM </div>
+            <div> 12:30 </div>
+            <div> <span> 1:00 </span>PM </div>
+            <div> 1:30 </div>
+            <div> <span> 2:00 </span>PM </div>
+            <div> 2:30 </div>
+            <div> <span> 3:00 </span>PM </div>
+            <div> 3:30 </div>
+            <div> <span> 4:00 </span>PM </div>
+            <div> 4:30 </div>
+            <div> <span> 5:00 </span>PM </div>
+            <div> 5:30 </div>
+            <div> <span> 6:00 </span>PM </div>
+            <div> 6:30 </div>
+            <div> <span> 7:00 </span>PM </div>
+            <div> 7:30 </div>
+            <div> <span> 8:00 </span>PM </div>
+            <div> 8:30 </div>
+            <div> <span> 9:00 </span>PM </div>
+            <div> 9:30 </div>
+            <div> <span> 10:00 </span>PM </div>
+            <div> 10:30 </div>
+            <div> <span> 11:00 </span>PM </div>
+            <div> 11:30 </div>
+            <div> <span> 12:00 </span>AM </div>
+        </div>
+        <div id="events" class="days"></div>
+    </div>
+
+    </div>
+    <!-- <input type = "button" onclick = "myFunction()" value = "Say Hello" /> -->
+    <script type = "text/javascript" src = "{{ url_for('static', filename = 'script.js') }}" ></script>
+  </body>
+</html>
