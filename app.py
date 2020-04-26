@@ -10,16 +10,28 @@ user = eventbrite.get_user()
 
 # name, url, description, date,  image, *location (can be found in the expansion of venue)
 
+# Date: 
+# 10/16/2019
 
-def eb_api_query():
+# Location: 
+# Berkeley
+
+# Price: 
+# Radius: 
+# 34
+
+# Categories: 
+
+
+def eb_api_query(*args):
     # dictionary keys of argument are the fields we care about
-    arguments = {"location.address":"", "categories": "", "start_date.range_start" : ""}
+    arguments = {"location.address": "", "categories": "", "start_date.range_start" : ""}
 
     # do something like this...
-    arguments["location.address"] = "Berkeley"
+    arguments["location.address"] = args[0]
     # YYYY-MM-DDThh:mm:ssZ
-    arguments["start_date.range_start"] = "2019-09-29T00:00:00"
-    arguments["categories"] = "103"
+    arguments["start_date.range_start"] = args[2]
+    arguments["categories"] = args[1]
     
 
 
@@ -62,4 +74,4 @@ def eb_api_query():
 
     
 
-eb_api_query()
+#eb_api_query()

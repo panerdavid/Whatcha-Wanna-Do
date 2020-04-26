@@ -1,51 +1,63 @@
-function myFunction(){
-    // var select = document.getElementsByClassName("cbox").getElementsByClassName("cboxtext")[0];
-    // alert(select);
-    var table = document.getElementById("checklist");
-    if (table!=null){
-        for (var i = 0; i<table.rows.length; i++){
-            for (var j = 0; j<table.rows[i].cells.length; j++){
-                table.rows[i].cells[j].onclick = function(){
-                    alert(this.innerHTML.substring(133,this.innerHTML.length));
-                    // console.log(this.innerHTML.substring(140,this.innerHTML.length));
-                    var text = this.innerHTML.substring(140,this.innerHTML.length);
-                    var textlist = text.split("<br>");
-                    var title = textlist[0].trim();
-                    var date = textlist[1].trim();
-                    var location = textlist[2].trim();
-                    console.log(location);
-                    var start = date.substring(11,19);
-                    var end = date.substring(20,date.length);
-                    var newt = timeslot(start, end);
-                    console.log(newt);
-                    var dic = {
-                        start: newt[0],
-                        end: newt[1],
-                        // start: 60,
-                        // end: 120,
-                        title: title,
-                        loc: location
-                    };
-                    eventlst.push(dic);
-                    layOutDay(eventlst);
-                    // createEvent(start, end, title, location);
-                    // console.log(date);
-                    // console.log(start);
-                    // console.log(end);
-                    // for (var k=0; k <text.length; k++){
-                    //     if counter == 0:
-                    //         title.concat(text.charAt(k));
-                    //
-                    // }
-                }
-            }
-        }
-    }
-    // var text = document.getElementsByClassName("cboxtext")[0].innerHTML;
-    // console.log(text)
-    // alert(text);
+// slideshow
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
 }
-eventlst = [];
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+}
+
+
+// add event
+function myFunc(){
+    eventlst = [];
+    var activities = document.forms["act"];
+    console.log(activities);
+    for (var i = 0; i < activities.length; i++) {
+        if (activities[i].checked) {
+            // console.log("check worked");
+            var textlist = activities[i].value.split("//");
+            console.log(i , textlist);
+            var title = textlist[0].trim();
+            var date = textlist[1].trim();
+            var location = textlist[2].trim();
+            var start = date.substring(0,5);
+            var end = date.substring(6,date.length);
+            var newt = timeslot(start, end);
+            var dic = {
+                start: newt[0],
+                end: newt[1],
+                title: title,
+                loc: location
+            };
+            eventlst.push(dic);
+            console.log(eventlst);
+            layOutDay(eventlst);
+        } else {
+            layOutDay(eventlst);
+        }
+     }
+}
+
 function timeslot (start, end) {
     //return diff of start -> end in minutes
     var init = start.substring(0,2);
@@ -55,15 +67,7 @@ function timeslot (start, end) {
 
     var initconv = parseInt(init) * 60 + parseFloat(initdeci) - 420;
     var finalconv = parseInt(final) * 60 + parseFloat(finaldeci) - 420;
-
-    // let height = (event.end - event.start) / minutesinDay * containerHeight;
-    // let top = event.start / minutesinDay * containerHeight;
     return [initconv, finalconv];
-    //
-    // let height = (event.end - event.start) / minutesinDay * containerHeight;
-    // let top = event.start / minutesinDay * containerHeight;
-    // let end = event.end;
-    // let start = event.start;
 }
 
 
@@ -91,8 +95,9 @@ var createEvent = (height, top, left, units, title, loc) => {
   node.style.width = ((containerWidth + 19)/units) + "px";
   node.style.height = height + "px";
   node.style.top = top + "px";
-  node.style.left = 233 + left + "px";
-
+  // node.style.left = 233 + left + "px";
+  node.style.left = left + "px";
+  node.style.right = "10px";
   document.getElementById("events").appendChild(node);
 }
 
@@ -125,15 +130,14 @@ function getCollisions (events) {
 
     while (start < end) {
       timeIndex = Math.floor(start/30);
-      // console.log(timeIndex);
-      // console.log("collisions" + collisions.length)
+      console.log(timeIndex);
       while (order < events.length) {
         if (collisions[timeIndex].indexOf(order) === -1) {
           break;
         }
         order ++;
       }
-
+      console.log(collisions[timeIndex]);
       collisions[timeIndex][id] = order;
       start = start + 30;
     }
@@ -157,29 +161,33 @@ function getAttributes (events) {
     width.push(0);
     leftOffSet.push(0);
   }
+  if (collisions!=null){
+      collisions.forEach((period) => {
 
-  collisions.forEach((period) => {
-
-    // number of events in that period
-    let count = period.reduce((a,b) => {
-      return b ? a + 1 : a;
-    })
-
-    if (count > 1) {
-      period.forEach((event, id) => {
-        // max number of events it is sharing a time period with determines width
-        if (period[id]) {
-          if (count > width[id]) {
-            width[id] = count;
-          }
+        // number of events in that period
+        if (period.length==0){
+            return;
         }
+        let count = period.reduce((a,b) => {
+          return b ? a + 1 : a;
+        })
 
-        if (period[id] && !leftOffSet[id]) {
-          leftOffSet[id] = period[id];
+        if (count > 1) {
+          period.forEach((event, id) => {
+            // max number of events it is sharing a time period with determines width
+            if (period[id]) {
+              if (count > width[id]) {
+                width[id] = count;
+              }
+            }
+
+            if (period[id] && !leftOffSet[id]) {
+              leftOffSet[id] = period[id];
+            }
+          })
         }
-      })
+      });
     }
-  });
 };
 
 var layOutDay = (events) => {
@@ -190,16 +198,23 @@ myNode.innerHTML = '';
 
   getCollisions(events);
   getAttributes(events);
+  var heighttotal = 0;
 
   events.forEach((event, id) => {
-    let height = (event.end - event.start-1) / minutesinDay * containerHeight;
-    let top = (event.start-1) / minutesinDay * containerHeight  + 977;
+    let height = (event.end - event.start) / minutesinDay * containerHeight;
+    // let top = (event.start-1) / minutesinDay * containerHeight  + 977;
+
+
+    let top = (event.start) / minutesinDay * containerHeight - heighttotal;
+    // console.log(top);
+    heighttotal += height
+    // console.log(toptotal);
     let end = event.end;
     let start = event.start;
     let units = width[id];
     if (!units) {units = 1};
-    let left = (containerWidth / width[id]) * (leftOffSet[id] - 1) + 10;
-    if (!left || left < 0) {left = 10};
+    let left = (containerWidth / width[id]) * (leftOffSet[id] - 1);
+    // if (!left || left < 0) {left = 10};
     createEvent(height, top, left, units, event.title, event.loc);
   });
 }

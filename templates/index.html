@@ -2,12 +2,8 @@
   <head>
     <title>Whatcha wanna do</title>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
-
-    <!-- <script type = "text/javascript" src = "{{ url_for('static', filename = 'layOutDay.js') }}" ></script> -->
-  </head>
   <body>
       <h1 id = "head"> Whatcha Wanna Do?</h1>
-      <!-- <div id = "col"> -->
           <div id = "filter">
                 <form method="POST">
                     <div class = "row">
@@ -59,17 +55,64 @@
                 </form>
             </div>
             <br>
-        <div id = "act">
-            <table id = "checklist">
-                <tr>
-                    <th> Activities: </th>
-                </tr>
-            </table>
-        </div>
+            <div class="slideshow-container">
+                    <form name = "act">
+                        <!-- TODO -->
+                        <!-- add jinja for loop here! -->
+                        <!-- have item in for loop named as dic  -->
+                        {% for dic in results %}
+                            <div class="mySlides fade">
+                                <input class = "star" onclick = "myFunc()" type="checkbox" value="{{dic['name']}}//{{dic['start_time'][0:5]}}-{{dic['end_time'][0:5]}}//{{dic['location']}}">
+                                <br>
+                                <br>
+                                <div class = "cboxtext">
+                                    <!-- TODO -->
+                                    
+                                    <!-- add name in below div -->
+                                    <div style="font-size:24px; width: 100%"> {{ dic.name }} </div>
+
+                                    <!-- TODO -->
+                                    {{ dic.date }}
+                                    {{ dic.location }}
+                                    <!-- add event info (time/ location)  -->
+
+                                </div>
+                                <img id = "pict" src="{{dic['image']}}" width="650px" height="400px">
+                                <p>
+                                    <!-- TODO -->
+                                    {{ dic.description }}                                    
+                                    <!-- add description -->
+                                </p>
+                                <p>
+                                    <a href="{{dic['url']}}"> {{dic['url']}} </a>
+                                </p>
+                            </div>
+                            <!-- TODO -->
+                            {% endfor %}
+                        <!-- close jinja for loop here -->
+                    </form>
+                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            </div>
+                <br>
+
+                <div style="text-align:center">
+                  <span class="dot" onclick="currentSlide(1)"></span>
+                  <span class="dot" onclick="currentSlide(2)"></span>
+                  <span class="dot" onclick="currentSlide(3)"></span>
+                  <span class="dot" onclick="currentSlide(4)"></span>
+                  <span class="dot" onclick="currentSlide(5)"></span>
+                  <span class="dot" onclick="currentSlide(6)"></span>
+                  <span class="dot" onclick="currentSlide(7)"></span>
+                  <span class="dot" onclick="currentSlide(8)"></span>
+                  <span class="dot" onclick="currentSlide(9)"></span>
+                  <span class="dot" onclick="currentSlide(10)"></span>
+                </div>
     <div id = "sched">
-        {% if lst %}
+        <!-- {% if lst %}
             <p> Schedule: {{lst[0]["date"]}} </p>
-        {% endif %}
+        {% endif %} -->
         <div class ="container">
           <div class="timings">
               <!-- <hr> -->
@@ -114,7 +157,6 @@
     </div>
 
     </div>
-    <!-- <input type = "button" onclick = "myFunction()" value = "Say Hello" /> -->
     <script type = "text/javascript" src = "{{ url_for('static', filename = 'script.js') }}" ></script>
   </body>
 </html>
